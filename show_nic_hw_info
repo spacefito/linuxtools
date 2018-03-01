@@ -1,0 +1,4 @@
+#!/bin/bash
+for interface in $(ls /sys/bus/pci/devices/*/virtio*/net/*/address)
+  do grep -H ':' $interface
+done
