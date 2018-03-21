@@ -62,11 +62,15 @@ class interface():
             self._if_info = None
         self._if_info = output.decode('utf-8')
 
-        self._mac_address = self._mac_address_regex_find.search(
-            self._if_info).group(1)
+        found = self._mac_address_regex_find.search(
+            self._if_info)
+        if found:
+            self._mac_address = found.group(1)
 
-        self._ip_address = self._ip_address_regex_find.search(
-            self._if_info).group(1)
+        found = self._ip_address_regex_find.search(
+            self._if_info)
+        if found:
+            self._ip_address = found.group(1)
 
         command = 'grep'
         arg1 = 'PCI_SLOT_NAME'
@@ -77,8 +81,11 @@ class interface():
         if err:
             self._if_info = None
         self._pci_bus_info = output.decode('utf-8')
-        self._pci_bus_id = self._pci_bus_regex_find.search(
-            self._pci_bus_info).group(1)
+
+        found = self._pci_bus_regex_find.search(
+            self._pci_bus_info)
+        if found:
+            self._pci_bus_id = found.group(1)
 
     def __str__(self):
         return "-".join(
