@@ -2,3 +2,4 @@
 for interface in $(ls /sys/bus/pci/devices/*/virtio*/net/*/address)
   do grep -H ':' $interface
 done
+grep PCI_SLOT_NAME /sys/class/net/*/device/uevent
