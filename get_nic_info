@@ -77,7 +77,6 @@ class interface():
         if err:
             self._if_info = None
         self._pci_bus_info = output.decode('utf-8')
-        print(self._pci_bus_info)
         self._pci_bus_id = self._pci_bus_regex_find.search(
             self._pci_bus_info).group(1)
 
