@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+from subprocess import call
+from subprocess import Popen, PIPE
+import re
+import sys
+
+
+class interface():
+
+    def __init__(self, name="<dev_name>", mac_address="<mac_address>",
+                 ip_address="<ip>",
+                 pci_bus_id="<pci_bus_id>"):
+        self._name = name
+        self._mac_address = mac_address
+        self._ip_address = ip_address
+        self._pci_bus_id = pci_bus_id
+        self._rc = 0
+        self._if_info = ""
+        self._pci_bus_info = ""
+        self._info_stale = True
+        self._mac_address_regex_find = re.compile('HWaddr (\S*) ')
+        self._ip_address_regex_find = re.compile('inet addr:(\S*)')
+        self._pci_bus_regex_find = re.compile('PCI_SLOT_NAME=(\S*)')
+
+    def prepair_info(self):
+        if self._info_stale:
+            self._refresh_info()
+            self._info_not_refreshed = False
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+    @property
+    def mac_address(self):
+        self.prepair_info()
+        return self._mac_address
+
+    @property
+    def ip_address(self):
+        self.prepair_info()
+        return self._ip_address
+
+    @property
+    def pci_bus_id(self):
+        self.prepair_info()
+        return self._pci_bus_id
+
+    def refresh_info(self):
+        self._refresh_info()
+
+    def _refresh_info(self):
+        command = "/sbin/ifconfig"
+        p = Popen([command, self.name], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        output, err = p.communicate()
+        self._rc = p.returncode
+        if err:
+            self._if_info = None
+        self._if_info = output.decode('utf-8')
+
+        self._mac_address = self._mac_address_regex_find.search(
+            self._if_info).group(1)
+
+        self._ip_address = self._ip_address_regex_find.search(
+            self._if_info).group(1)
+
+        command = 'grep'
+        arg1 = 'PCI_SLOT_NAME'
+        arg2 = '/sys/class/net/{}/device/uevent'.format(self.name)
+        p = Popen([command, arg1, arg2], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        output, err = p.communicate()
+        self._rc = p.returncode
+        if err:
+            self._if_info = None
+        self._pci_bus_info = output.decode('utf-8')
+        print(self._pci_bus_info)
+        self._pci_bus_id = self._pci_bus_regex_find.search(
+            self._pci_bus_info).group(1)
+
+    def __str__(self):
+        return "-".join(
+            [self.name, self.mac_address, self.ip_address, self.pci_bus_id])
+
+
+def main():
+    _interface = interface(name=sys.argv[1])
+    print(_interface)
+
+
+if __name__ == "__main__":
+    main()
