@@ -1,0 +1,2 @@
+#!/bin/bash
+ls ~/scratch/ansible/next/ardana/ansible/host_vars
