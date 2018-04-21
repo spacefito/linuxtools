@@ -1,2 +1,2 @@
 alias showhpgs='grep Huge /proc/meminfo'
-alias supportedhpsizes="if grep  -q pse /proc/cpuinfo;  then echo 2MB; fi; if grep -q pdpe1gb /proc/cpuinfo | uniq; then echo '1GB';fi"
+alias supportedhpsizes="if grep  -q pse /proc/cpuinfo;  then echo 2MB; fi; if grep -q pdpe1gb /proc/cpuinfo; then echo '1GB';fi"
