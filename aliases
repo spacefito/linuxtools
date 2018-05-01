@@ -1,2 +1,5 @@
 alias showhpgs='grep Huge /proc/meminfo'
 alias supportedhpsizes="if grep  -q pse /proc/cpuinfo;  then echo 2MB; fi; if grep -q pdpe1gb /proc/cpuinfo; then echo '1GB';fi"
+alias run-cp='cd $HOME/openstack/ardana/ansible; ansible-playbook -i hosts/localhost config-processor-run.yml -e encrypt="" -e rekey=""'
+alias ready-deployment='cd $HOME/openstack/ardana/ansible; ansible-playbook -i hosts/localhost ready-deployment.yml'
+alias cdscratch='cd $HOME/scratch/ansible/next/ardana/ansible'
