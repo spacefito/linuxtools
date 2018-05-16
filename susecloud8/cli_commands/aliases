@@ -1,0 +1,11 @@
+alias showhpgs='grep Huge /proc/meminfo'
+alias supportedhpsizes="if grep  -q pse /proc/cpuinfo;  then echo 2MB; fi; if grep -q pdpe1gb /proc/cpuinfo; then echo '1GB';fi"
+alias run-cp='cd $HOME/openstack/ardana/ansible; ansible-playbook -i hosts/localhost config-processor-run.yml -e encrypt="" -e rekey=""'
+alias ready-deployment='cd $HOME/openstack/ardana/ansible; ansible-playbook -i hosts/localhost ready-deployment.yml'
+alias cdscratch='cd $HOME/scratch/ansible/next/ardana/ansible'
+alias cdedit='cd $HOME/openstack/my_cloud/definition/data'
+alias run-site='cd $HOME/scratch/ansible/next/ardana/ansible; ansible-playbook -i hosts/verb_hosts site.yml'
+alias enable-routing='sudo sysctl -w net.ipv4.ip_forward=1'
+alias disable-routing='sudo sysctl -w net.ipv4.ip_forward=0'
+alias show-routing='cat /proc/sys/net/ipv4/ip_forward'
+alias cdansible='cd ~/openstack/ardana/ansible'
