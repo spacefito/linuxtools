@@ -78,6 +78,7 @@ Collect logs under /home/username/logs/input/*/*.log
     sudo leapone:/home/username/logs/input # systemctl start kibana
     sudo systemctl start logstash
     
+    # cp all the *.log files you want to process to /home/username/logs/input/*/*.log
     # The following resets Filebeats to read all of the files, otherwise it only reads new information, not whole file
     sudo rm /var/lib/filebeat/registry
     
