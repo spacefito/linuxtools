@@ -59,13 +59,27 @@ Add the following to end of /etc/filebeat/filebeat.yml
     - drop_fields:
         fields: ["host"]
 
-Filebeats config file example: 
+Createa Filebeats config file (example): 
 
-    #cat filebeat.yml
+    #cat /home/username/logs/input/filebeat.yml
     filebeat.prospectors:
     - type: log
       paths:
-        - /home/adolfo/logs/input/*/*.log
+        - /home/username/logs/input/*/*.log
     output.logstash:
         hosts: ['localhost:5044']
 
+
+Collect logs
+=============
+Collect logs under /home/username/logs/input/*/*.log
+
+    sudo systemctl start elasticsearch
+    sudo leapone:/home/username/logs/input # systemctl start kibana
+    sudo systemctl start logstash
+    
+    # The following resets Filebeats to read all of the files, otherwise it only reads new information, not whole file
+    sudo rm /var/lib/filebeat/registry
+    
+    #run filebeats. Press Ctrl-C when it is done processing all files
+    sudo /usr/bin/filebeat -e -c /home/username/logs/input/filebeat.yml -d "*"
