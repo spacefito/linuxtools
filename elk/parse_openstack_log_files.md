@@ -1,64 +1,72 @@
 Installing Logstash
 ===================
 
-        wget https://artifacts.elastic.co/downloads/logstash/logstash-6.3.0.rpm
-        zypper install ./logstash-6.3.0.rpm
-        /usr/share/logstash/bin/logstash-plugin install logstash-filter-multiline
+```
+wget https://artifacts.elastic.co/downloads/logstash/logstash-6.3.0.rpm
+zypper install ./logstash-6.3.0.rpm
+/usr/share/logstash/bin/logstash-plugin install logstash-filter-multiline
+```
 
 add _beats_pipeline.conf_ under /etc/logstash/conf.d :
 
-        # cat beats_pipeline.conf
-    
-        input {
-            beats {
-             port => "5044"
-            }
-        }
+```
+# cat beats_pipeline.conf
+input {
+    beats {
+        port => "5044"
+    }
+}
 
-        filter {
-            grok {
-                match => { "message" => "(?m)^%{TIMESTAMP_ISO8601:logdate}%{SPACE}%{NUMBER:pid}?%{SPACE}?(?<loglevel>AUDIT|CRITICAL|DEBUG|INFO|TRACE|WARNING|ERROR) \[?\b%{NOTSPACE:module}\b\]?%{SPACE}?%{GREEDYDATA:logmessage}?" }
-            }
-        }
+filter {
+    grok {
+      match => { "message" => "(?m)^%{TIMESTAMP_ISO8601:logdate}%{SPACE}%{NUMBER:pid}?%{SPACE}?(?<loglevel>AUDIT|CRITICAL|DEBUG|INFO|TRACE|WARNING|ERROR) \[?\b%{NOTSPACE:module}\b\]?%{SPACE}?%{GREEDYDATA:logmessage}?" }
+    }
 
-        output {
-            elasticsearch{ hosts => ['localhost:9200']
-                     index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
-            }
-        }
+    date {
+      match => [ "logdate", "ISO8601"]
+    }
+}
 
+output {
+  elasticsearch{ hosts => ['localhost:9200']
+                 index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+  }
+}
+```
 
 Installing Elasticsearch
 ========================
-
-    wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.0.rpm
-    zypper install ./elasticsearch-6.3.0.rpm
-    systemctl daemon-reload
-    systemctl start elasticsearch
-    curl -X GET "localhost:9200/_cat/health?v"
-    curl -X GET "localhost:9200/_cat/nodes?v"
-    curl -X GET "localhost:9200/_cat/indices?v"
-
+```
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.0.rpm
+zypper install ./elasticsearch-6.3.0.rpm
+systemctl daemon-reload
+systemctl start elasticsearch
+curl -X GET "localhost:9200/_cat/health?v"
+curl -X GET "localhost:9200/_cat/nodes?v"
+curl -X GET "localhost:9200/_cat/indices?v"
+```
 
 Installing Kibana
 =================
-
+```
     wget https://artifacts.elastic.co/downloads/kibana/kibana-6.3.0-x86_64.rpm
     zypper install ./kibana-6.3.0-x86_64.rpm
-    
+```    
 
 Installing Filebeats
 ====================
-    wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.3.0-x86_64.rpm
-    zypper install ./filebeat-6.3.0-x86_64.rpm
+```
+wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.3.0-x86_64.rpm
+zypper install ./filebeat-6.3.0-x86_64.rpm
+```
 
 Add the following to end of /etc/filebeat/filebeat.yml
-
-    #==========================processors===============================
-    processors:
-    - drop_fields:
-        fields: ["host"]
-
+```
+#==========================processors===============================
+processors:
+- drop_fields:
+    fields: ["host"]
+```
 Createa Filebeats config file (example): 
 
 ```
@@ -80,19 +88,20 @@ patterns:
   pid: '(\d+)'
   level: '(ERROR|CRITICAL|INFO|DEBUG|WARNING|TRACE)' # or use '\w+' if unsure about all levels
   component: '([^\s]+)'
-
+```
 
 Collect logs
 =============
 Collect logs under /home/username/logs/input/*/*.log
-
-    sudo systemctl start elasticsearch
-    sudo leapone:/home/username/logs/input # systemctl start kibana
-    sudo systemctl start logstash
+```
+sudo systemctl start elasticsearch
+sudo leapone:/home/username/logs/input # systemctl start kibana
+sudo systemctl start logstash
     
-    # cp all the *.log files you want to process to /home/username/logs/input/*/*.log
-    # The following resets Filebeats to read all of the files, otherwise it only reads new information, not whole file
-    sudo rm /var/lib/filebeat/registry
+# cp all the *.log files you want to process to /home/username/logs/input/*/*.log
+# The following resets Filebeats to read all of the files, otherwise it only reads new information, not whole file
+sudo rm /var/lib/filebeat/registry
     
-    #run filebeats. Press Ctrl-C when it is done processing all files
-    sudo /usr/bin/filebeat -e -c /home/username/logs/input/filebeat.yml -d "*"
+#run filebeats. Press Ctrl-C when it is done processing all files
+sudo /usr/bin/filebeat -e -c /home/username/logs/input/filebeat.yml -d "*"
+```
