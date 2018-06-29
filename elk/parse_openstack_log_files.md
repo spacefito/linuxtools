@@ -49,8 +49,8 @@ curl -X GET "localhost:9200/_cat/indices?v"
 Installing Kibana
 =================
 ```
-    wget https://artifacts.elastic.co/downloads/kibana/kibana-6.3.0-x86_64.rpm
-    zypper install ./kibana-6.3.0-x86_64.rpm
+wget https://artifacts.elastic.co/downloads/kibana/kibana-6.3.0-x86_64.rpm
+zypper install ./kibana-6.3.0-x86_64.rpm
 ```    
 
 Installing Filebeats
