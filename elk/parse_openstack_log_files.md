@@ -66,9 +66,18 @@ Createa Filebeats config file (example):
     - type: log
       paths:
         - /home/username/logs/input/*/*.log
+      multiline:
+        match: after
+        negate: true
+        pattern: '^${patterns.timestamp} ${patterns.pid} ${patterns.level} ${patterns.component} \['
     output.logstash:
         hosts: ['localhost:5044']
 
+    patterns:
+       timestamp: '(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d{3})'
+        pid: '(\d+)'
+        level: '(ERROR|CRITICAL|INFO|DEBUG|WARNING|TRACE)' # or use '\w+' if unsure about all levels
+        component: '([^\s]+)'
 
 Collect logs
 =============
