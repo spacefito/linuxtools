@@ -119,7 +119,7 @@ patterns:
 
 Collect logs
 =============
-Collect logs under /home/username/logs/input/*/*.log
+Collect logs under /home/username/logs/input/\*/\*.log
 ```
 sudo systemctl start elasticsearch
 sudo leapone:/home/username/logs/input # systemctl start kibana
