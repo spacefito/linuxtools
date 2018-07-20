@@ -2,6 +2,7 @@ Installing Logstash
 ===================
 
 ```
+#as su (sudo su)
 wget https://artifacts.elastic.co/downloads/logstash/logstash-6.3.0.rpm
 zypper install ./logstash-6.3.0.rpm
 /usr/share/logstash/bin/logstash-plugin install logstash-filter-multiline
