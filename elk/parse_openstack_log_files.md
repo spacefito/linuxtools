@@ -28,16 +28,16 @@ Installing Logstash
 ===================
 
 ```
-#as su (sudo su)
-wget https://artifacts.elastic.co/downloads/logstash/logstash-6.3.0.rpm
-zypper install ./logstash-6.3.0.rpm
-/usr/share/logstash/bin/logstash-plugin install logstash-filter-multiline
+
+sudo wget https://artifacts.elastic.co/downloads/logstash/logstash-6.3.0.rpm
+sudo zypper install ./logstash-6.3.0.rpm
+sudo /usr/share/logstash/bin/logstash-plugin install logstash-filter-multiline
 ```
 
 add _beats_pipeline.conf_ under /etc/logstash/conf.d :
 
 ```
-# cat beats_pipeline.conf
+# sudo cat /etc/logstash/conf.d/beats_pipeline.conf
 input {
     beats {
         port => "5044"
@@ -64,10 +64,10 @@ output {
 Installing Elasticsearch
 ========================
 ```
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.0.rpm
-zypper install ./elasticsearch-6.3.0.rpm
-systemctl daemon-reload
-systemctl start elasticsearch
+sudo wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.0.rpm
+sudo zypper install ./elasticsearch-6.3.0.rpm
+sudo systemctl daemon-reload
+sudo systemctl start elasticsearch
 curl -X GET "localhost:9200/_cat/health?v"
 curl -X GET "localhost:9200/_cat/nodes?v"
 curl -X GET "localhost:9200/_cat/indices?v"
@@ -76,28 +76,29 @@ curl -X GET "localhost:9200/_cat/indices?v"
 Installing Kibana
 =================
 ```
-wget https://artifacts.elastic.co/downloads/kibana/kibana-6.3.0-x86_64.rpm
-zypper install ./kibana-6.3.0-x86_64.rpm
+sudo wget https://artifacts.elastic.co/downloads/kibana/kibana-6.3.0-x86_64.rpm
+sudo zypper install ./kibana-6.3.0-x86_64.rpm
 ```    
 
 Installing Filebeats
 ====================
 ```
-wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.3.0-x86_64.rpm
-zypper install ./filebeat-6.3.0-x86_64.rpm
+sudo wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.3.0-x86_64.rpm
+sudo zypper install ./filebeat-6.3.0-x86_64.rpm
 ```
 
 Add the following to end of /etc/filebeat/filebeat.yml
-```
+``` 
 #==========================processors===============================
 processors:
 - drop_fields:
     fields: ["host"]
 ```
-Createa Filebeats config file (example): 
+Createa Filebeats config file: 
 
+*Note that _/home/username/_  is _~\/_, but it is best to spell out in the yml file
 ```
-#cat /home/username/logs/input/filebeat.yml
+#cat ~/logs/input/filebeat.yml
 filebeat.prospectors:
 - type: log
   paths:
@@ -117,9 +118,10 @@ patterns:
   component: '([^\s]+)'
 ```
 
+
 Collect logs
 =============
-Collect logs under /home/username/logs/input/\*/\*.log
+Collect logs under ~/logs/input/\*/\*.log
 ```
 sudo systemctl start elasticsearch
 sudo leapone:/home/username/logs/input # systemctl start kibana
