@@ -1,3 +1,29 @@
+Prerequisites:
+==============
+```
+ELK:/etc/logstash/conf.d # zypper lr
+Repository priorities are without effect. All enabled repositories share the same priority.
+
+#  | Alias                     | Name                                    | Enabled | GPG Check | Refresh
+---+---------------------------+-----------------------------------------+---------+-----------+--------
+ 1 | openSUSE-Leap-42.3-0      | openSUSE-Leap-42.3-0                    | No      | ----      | ----
+ 2 | packman.inode.at-suse     | Packman Repository                      | Yes     | (r ) Yes  | No
+ 3 | repo-debug                | openSUSE-Leap-42.3-Debug                | No      | ----      | ----
+ 4 | repo-debug-non-oss        | openSUSE-Leap-42.3-Debug-Non-Oss        | No      | ----      | ----
+ 5 | repo-debug-update         | openSUSE-Leap-42.3-Update-Debug         | No      | ----      | ----
+ 6 | repo-debug-update-non-oss | openSUSE-Leap-42.3-Update-Debug-Non-Oss | No      | ----      | ----
+ 7 | repo-non-oss              | openSUSE-Leap-42.3-Non-Oss              | Yes     | (r ) Yes  | No
+ 8 | repo-oss                  | openSUSE-Leap-42.3-Oss                  | Yes     | (r ) Yes  | No
+ 9 | repo-source               | openSUSE-Leap-42.3-Source               | No      | ----      | ----
+10 | repo-source-non-oss       | openSUSE-Leap-42.3-Source-Non-Oss       | No      | ----      | ----
+11 | repo-update               | openSUSE-Leap-42.3-Update               | Yes     | (r ) Yes  | No
+12 | repo-update-non-oss       | openSUSE-Leap-42.3-Update-Non-Oss       | Yes     | (r ) Yes  | No
+```
+
+```
+zypper install java-1_8_0-openjdk
+```
+
 Installing Logstash
 ===================
 
